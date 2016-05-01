@@ -8,4 +8,17 @@
         android:layout_height="52dp"
         layout="@layout/top_view" />
 
+    <View
+        android:id="@+id/progress_bar"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:background="#00e000"/>
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </WebView>
+
 </LinearLayout>

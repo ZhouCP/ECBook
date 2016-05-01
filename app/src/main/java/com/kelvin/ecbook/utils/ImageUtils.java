@@ -77,7 +77,7 @@ public class ImageUtils {
         Intent intent = new Intent();
         intent.setAction(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
-        fragment.startActivityForResult(intent,REQUEST_CODE_FROM_ALBUM);
+        fragment.startActivityForResult(intent, REQUEST_CODE_FROM_ALBUM);
 
         /**
          Intent intent = new Intent();
@@ -87,6 +87,14 @@ public class ImageUtils {
          */
     }
 
+    public static void pickImageFromAlbum(final Activity activity){
+
+        //隐式调用，可能出现多种选择
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        activity.startActivityForResult(intent,REQUEST_CODE_FROM_ALBUM);
+    }
 
     /**
      * 打开相机拍照获取图片

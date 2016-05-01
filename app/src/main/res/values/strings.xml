@@ -33,6 +33,12 @@
     <string name="dialog_ensure">确定</string>
     <string name="dialog_cancel">取消</string>
 
-    <string name="topview_message">通知</string>
+    <string name="topview_message">赚EC币</string>
+
+    <string name="declare_title">标题</string>
+    <string name="declare_category">类别</string>
+    <string name="declare_price">EC币</string>
+
+    <string name="search_input">请输入搜索关键字</string>
 
 </resources>

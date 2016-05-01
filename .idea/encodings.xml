@@ -3,6 +3,7 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/app/libs/photoview-library-1.2.2.jar" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/libs/universal-image-loader-1.9.2_sources.jar" charset="GBK" />
+    <file url="file://$PROJECT_DIR$/app/src/main/java/com/kelvin/ecbook/adapter/ViewPagerAdapter.java" charset="GBK" />
     <file url="file://$PROJECT_DIR$/app/src/main/java/com/kelvin/ecbook/utils/ImageLoadOptions.java" charset="GBK" />
     <file url="PROJECT" charset="UTF-8" />
   </component>
