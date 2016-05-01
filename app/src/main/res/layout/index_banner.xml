@@ -7,21 +7,34 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/banner_viewpager"
         android:layout_width="match_parent"
-        android:layout_height="160dp" />
+        android:layout_height="170dp"
+        android:background="@drawable/default_image"/>
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="15dp"
+    <LinearLayout
+        android:id="@+id/layout_indicator"
+        android:layout_width="60dp"
+        android:layout_height="13dp"
         android:layout_gravity="center_horizontal|bottom"
         android:layout_marginBottom="3dp"
-        android:background="@drawable/index_carsouel_bg" >
+        android:background="@drawable/index_carsouel_bg"
+        android:orientation="horizontal"
+        android:gravity="center">
 
-        <com.kelvin.ecbook.view.viewpager.CirclePageIndicator
-            android:id="@+id/indicator"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="2dp" />
-    </FrameLayout>
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/indicator_unselected"/>
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/indicator_unselected"/>
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/indicator_unselected"/>
+
+    </LinearLayout>
 
 </FrameLayout>

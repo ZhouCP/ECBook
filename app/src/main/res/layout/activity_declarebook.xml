@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/body">
+
+    <include
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        layout="@layout/top_view" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="250dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/body_cont_bg"
+        android:baselineAligned="false"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <LinearLayout
+            android:id="@+id/good_cell_one"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:layout_margin="5dp"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/good_cell_name_one"
+                android:layout_width="match_parent"
+                android:layout_height="22dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="10dp"
+                android:gravity="center_vertical"
+                android:textColor="#000000"
+                android:textSize="15dp"
+                android:textStyle="bold"
+                android:text="添加封面描述"/>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/good_cell_photo_one"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/default_image"
+                    android:layout_marginRight="10dp"/>
+
+                <ImageView
+                    android:id="@+id/good_cell_photo_two"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/default_image" />
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@drawable/body_cont"
+        android:gravity="center_vertical"
+        android:orientation="vertical" >
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/declare_title"
+                android:layout_gravity="center_vertical"
+                android:textSize="15sp"
+                android:layout_marginLeft="10dp"/>
+
+            <EditText
+                android:id="@+id/input_title"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="55dp"
+                android:background="#ffffff"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:maxLength="20"
+                android:textSize="16dp"
+                android:hint="填写电子书标题"/>
+        </FrameLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.1dp"
+            android:background="#c4c4c4" />
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/declare_category"
+                android:layout_gravity="center_vertical"
+                android:textSize="15sp"
+                android:layout_marginLeft="10dp"/>
+
+            <Spinner
+                android:id="@+id/spinner_category"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="45dp"
+                android:background="#ffffff"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:password="true"
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:maxLength="20"
+                android:textSize="16dp"
+                android:entries="@array/category"/>
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/other_category"
+            android:layout_width="fill_parent"
+            android:layout_height="50dp"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/input_category"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="55dp"
+                android:background="#ffffff"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:maxLength="20"
+                android:textSize="16dp"
+                android:hint="填写其他类别" />
+
+        </FrameLayout>
+
+        <View
+            android:layout_width="fill_parent"
+            android:layout_height="0.1dp"
+            android:background="#c4c4c4" />
+
+        <FrameLayout
+            android:layout_width="fill_parent"
+            android:layout_height="50dp" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/declare_price"
+                android:layout_gravity="center_vertical"
+                android:textSize="15sp"
+                android:layout_marginLeft="10dp"/>
+
+            <EditText
+                android:id="@+id/input_price"
+                android:layout_width="fill_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="55dp"
+                android:background="#ffffff"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:singleLine="true"
+                android:textColor="#000000"
+                android:maxLength="20"
+                android:textSize="16dp"
+                android:inputType="number"
+                android:hint="填写下载所需的EC币"/>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+
+</LinearLayout>

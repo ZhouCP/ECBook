@@ -23,7 +23,7 @@
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="5dp"
             android:padding="10dp"
             android:src="@drawable/item_grid_header_arrow_icon" />
 
@@ -50,8 +50,8 @@
 
         <LinearLayout
             android:id="@+id/top_right_button"
-            android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_width="65dp"
+            android:layout_height="38dp"
             android:layout_gravity="center|right"
             android:layout_marginRight="5dp"
             android:background="@drawable/filter_blue_btn"

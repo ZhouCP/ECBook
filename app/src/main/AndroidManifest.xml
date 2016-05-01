@@ -36,6 +36,8 @@
         <activity android:name=".activity.MainActivity"/>
         <activity android:name=".activity.SigninActivity"/>
         <activity android:name=".activity.SignupActivity"/>
+        <activity android:name=".activity.WebViewActivity"/>
+        <activity android:name=".activity.DeclareBookActivity"/>
 
     </application>
 
