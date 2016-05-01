@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">ECBook</string>
+
+    <string name="exit">再按一次退出</string>
+
+    <string name="profile_title">个人中心</string>
+    <string name="profile_upload">我上传的</string>
+    <string name="profile_credit">我的积分</string>
+    <string name="profile_download">下载历史</string>
+    <string name="profile_detail">个人信息</string>
+    <string name="profile_download_manager">下载管理</string>
+    <string name="profile_help">帮助</string>
+    <string name="profile_clickto_signin">点击此处登录</string>
+
+    <string name="signin_title">用户登录</string>
+    <string name="signin_button">登录</string>
+    <string name="signin_username">用户名</string>
+    <string name="signin_password">密码</string>
+    <string name="signin_register">没有账号？免费注册</string>
+
+    <string name="signup_title">注册用户</string>
+    <string name="signup_button">注册</string>
+    <string name="signup_email">邮箱</string>
+    <string name="signup_confirm">确认密码</string>
+
+    <string name="xlistview_header_hint_normal">下拉刷新</string>
+    <string name="xlistview_header_hint_ready">释放刷新</string>
+    <string name="xlistview_header_hint_loading">正在加载…</string>
+    <string name="xlistview_header_last_time">最后更新时间：</string>
+    <string name="xlistview_footer_hint_normal">查看更多</string>
+    <string name="xlistview_footer_hint_ready">松开载入更多</string>
+
+    <string name="dialog_ensure">确定</string>
+    <string name="dialog_cancel">取消</string>
+
+    <string name="topview_message">通知</string>
+
+</resources>
