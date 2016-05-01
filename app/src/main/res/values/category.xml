@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string-array name="category">
-        <item>IT类</item>
-        <item>设计类</item>
-        <item>教材类</item>
-        <item>其他</item>
-    </string-array>
-</resources>
