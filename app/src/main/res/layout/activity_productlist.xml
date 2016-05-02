@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/good_list_bg"
+    android:orientation="vertical"
+    android:id="@+id/keyboardLayout1">
+
+    <include
+        android:id="@+id/search_topview"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        layout="@layout/search_topview" />
+
+    <include
+        android:id="@+id/goodslist_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        layout="@layout/filter_toolbar" />
+
+    <FrameLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" >
+
+        <com.kelvin.ecbook.view.xlistview.XListView
+            android:id="@+id/goods_listview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/goodslist_toolbar"
+            android:divider="#00000000"
+            android:dividerHeight="0dp" />
+
+        <include
+            android:id="@+id/null_pager"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            layout="@layout/null_pager"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/top_view"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="#7f000000"
+            android:visibility="invisible" />
+
+    </FrameLayout>
+
+</LinearLayout>

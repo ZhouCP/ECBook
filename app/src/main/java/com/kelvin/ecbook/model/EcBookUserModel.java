@@ -120,6 +120,8 @@ public class EcBookUserModel {
     public void saveUserInfoToLocal(){
         shared = this.activity.getSharedPreferences("userInfo", 0);
         editor = shared.edit();
+        editor.putString("objectid",user.getObjectId());
+        editor.putString("username",user.getUsername());
         editor.putString("email",user.getEmail());
         editor.putString("password",user.getPassword());
         editor.commit();        //提交更新

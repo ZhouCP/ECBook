@@ -2,15 +2,18 @@ package com.kelvin.ecbook.adapter;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kelvin.ecbook.R;
+import com.kelvin.ecbook.activity.ProductListActivity;
 import com.kelvin.ecbook.model.Book;
 import com.kelvin.ecbook.model.BookCategory;
 import com.kelvin.ecbook.utils.ImageLoadOptions;
@@ -117,6 +120,17 @@ public class BookCategoryAdapter extends BaseAdapter{
             @Override
             public void onError(int i, String s) {
 
+            }
+        });
+
+
+        LinearLayout cell_one = (LinearLayout) view.findViewById(R.id.good_cell_one);
+        cell_one.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, ProductListActivity.class);
+                intent.putExtra("category",mData.get(position).getTitle());
+                context.startActivity(intent);
             }
         });
 

@@ -1,6 +1,8 @@
 package com.kelvin.ecbook.activity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -192,7 +194,10 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
             book_category = book_other.getText().toString();
         }
 
+        SharedPreferences sh = getSharedPreferences("userInfo", Activity.MODE_PRIVATE);
+
         Book book = new Book();
+        book.setDelcarerId(sh.getString("objectid",""));
         book.setTitle(book_title.getText().toString());
         book.setCategory(book_category);
         book.setCost(Integer.parseInt(book_price.getText().toString()));

@@ -8,7 +8,7 @@
         android:id="@+id/banner_viewpager"
         android:layout_width="match_parent"
         android:layout_height="170dp"
-        android:background="@drawable/default_image"/>
+        android:background="@drawable/default_image_wide"/>
 
     <LinearLayout
         android:id="@+id/layout_indicator"

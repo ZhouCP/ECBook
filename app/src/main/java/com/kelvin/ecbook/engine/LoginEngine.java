@@ -55,9 +55,11 @@ public class LoginEngine {
                     EcBookUser user = list.get(0);
                     if (user.getPassword().equals(password)){
                         //保存登录信息
+                        /*
                         model.setUsername(user.getUsername());
                         model.setEmail(user.getEmail());
-                        model.setPassword(user.getPassword());
+                        model.setPassword(user.getPassword());*/
+                        model.setUser(user);
                         model.saveUserInfoToLocal();
 
                         if (dialog.isShowing()) dialog.dismiss();
