@@ -27,6 +27,7 @@ import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.DownloadFileListener;
 import cn.bmob.v3.listener.GetListener;
+import cn.bmob.v3.listener.UpdateListener;
 
 /**
  * Created by Kelvin on 2016/5/3.
@@ -87,7 +88,7 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
             @Override
             public void onSuccess(Book model) {
                 book = model;
-
+                setBookScanAddOne();
                 setBookDetail();
             }
 
@@ -100,6 +101,44 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
         });
     }
 
+
+    /**
+     * 设置电子书浏览次数+1
+     */
+    private void setBookScanAddOne(){
+
+        book.setScanTime(book.getScanTime()+1);
+        book.update(this, book.getObjectId(), new UpdateListener() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+
+            }
+        });
+    }
+
+    /**
+     * 设置电子书下载次数+1
+     */
+    private void setBookDownloadAddOne(){
+
+        book.setPayTime(book.getPayTime() + 1);
+        book.update(this, book.getObjectId(), new UpdateListener() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+
+            }
+        });
+    }
 
     /**
      * 设置电子书信息
@@ -200,6 +239,7 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
                 if (value == 100){
                     download_tip.setText("下载完成(" + MyConstant.BookDir + ")");
                     isDownloading = false;
+                    setBookDownloadAddOne();
                 }
             }
 

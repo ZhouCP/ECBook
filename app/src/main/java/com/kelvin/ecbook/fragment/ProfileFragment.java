@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -176,7 +177,9 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
     // set User 信息
     public void setUserInfo() {
 
-        name.setText(userModel.getCurrentUser().getUsername());
+        if (!TextUtils.isEmpty(userModel.getCurrentUser().getUsername())) {
+            name.setText(userModel.getCurrentUser().getUsername());
+        }
 
         String avatar = userModel.getCurrentUser().getAvatar();
         if (avatar != null && !avatar.equals("")) {

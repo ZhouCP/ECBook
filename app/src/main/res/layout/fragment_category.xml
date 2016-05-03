@@ -8,4 +8,11 @@
         android:layout_height="52dp"
         layout="@layout/search_topview" />
 
+    <ListView
+        android:id="@+id/list_category"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
+
 </LinearLayout>
