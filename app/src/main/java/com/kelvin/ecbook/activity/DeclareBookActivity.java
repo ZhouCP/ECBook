@@ -1,26 +1,33 @@
 package com.kelvin.ecbook.activity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.kelvin.ecbook.R;
+import com.kelvin.ecbook.config.MyConstant;
 import com.kelvin.ecbook.model.Book;
 import com.kelvin.ecbook.model.BookCategory;
+import com.kelvin.ecbook.utils.FileUtils;
 import com.kelvin.ecbook.utils.ImageUtils;
 import com.kelvin.ecbook.utils.UriUtils;
 import com.kelvin.ecbook.view.dialog.MyProgressDialog;
@@ -61,6 +68,15 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
 
     private MyProgressDialog dialog;
 
+    private LinearLayout upload_book;
+    private RelativeLayout upload_progress;
+    private View progress_bar;
+    private TextView progress_text;
+    private String pdfPath = "";
+    private String pdfUrl = "";
+
+    private boolean isUpload = false;     //标记是否处于上传状态
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +110,13 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
         book_title = (EditText)findViewById(R.id.input_title);
         book_other = (EditText)findViewById(R.id.input_category);
         book_price = (EditText)findViewById(R.id.input_price);
+
+        upload_book = (LinearLayout) findViewById(R.id.upload_book);
+        upload_book.setOnClickListener(this);
+
+        upload_progress = (RelativeLayout) findViewById(R.id.upload_progress);
+        progress_bar = findViewById(R.id.progress_bar);
+        progress_text = (TextView) findViewById(R.id.progress_text);
     }
 
     @Override
@@ -101,17 +124,21 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
 
         switch (v.getId()){
             case R.id.top_view_back:
-                finish();
+                if (isUpload == false) {
+                    finish();
+                }
                 break;
             case R.id.top_right_button:      //发布资源
-                if (TextUtils.isEmpty(book_title.getText().toString()) ||
-                        TextUtils.isEmpty(book_price.getText().toString())){
-                    ToastView toast = new ToastView(DeclareBookActivity.this, "请完善基本信息");
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-                }
-                else{
-                    uploadPhoto();
+
+                if (isUpload == false) {
+                    if (TextUtils.isEmpty(book_title.getText().toString()) ||
+                            TextUtils.isEmpty(book_price.getText().toString())) {
+                        ToastView toast = new ToastView(DeclareBookActivity.this, "请完善基本信息");
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    } else {
+                        uploadPhoto();
+                    }
                 }
                 break;
             case R.id.good_cell_photo_one:     //选择第一张图片
@@ -122,6 +149,11 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
                 which = 2;
                 ImageUtils.pickImageFromAlbum(this);
                 break;
+            case R.id.upload_book:     //选择上传电子书
+                if (isUpload == false) {
+                    showFileChooser();
+                }
+                break;
         }
     }
 
@@ -129,6 +161,8 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
      * 上传照片
      */
     private void uploadPhoto(){
+
+        isUpload = true;
 
         dialog = new MyProgressDialog(this,"发布中");
         dialog.setCanceledOnTouchOutside(true);
@@ -157,6 +191,8 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
 
                             @Override
                             public void onFailure(int i, String s) {
+
+                                isUpload = false;
                                 if (dialog.isShowing()) dialog.dismiss();
                                 ToastView toast = new ToastView(DeclareBookActivity.this, "图片上传失败：" + s);
                                 toast.setGravity(Gravity.CENTER, 0, 0);
@@ -171,6 +207,7 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
 
                 @Override
                 public void onFailure(int i, String s) {
+                    isUpload = false;
                     if (dialog.isShowing()) dialog.dismiss();
                     ToastView toast = new ToastView(DeclareBookActivity.this, "图片上传失败：" + s);
                     toast.setGravity(Gravity.CENTER, 0, 0);
@@ -183,6 +220,44 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
             declareBook();
         }
 
+    }
+
+
+    /**
+     * 上传电子书pdf
+     */
+    private void uploadPdfFile(){
+
+        isUpload = true;
+
+        final BmobFile pdfFile = new BmobFile(new File(pdfPath));
+        pdfFile.uploadblock(this, new UploadFileListener() {
+            @Override
+            public void onSuccess() {
+
+                Log.e("url", pdfFile.getFileUrl(DeclareBookActivity.this));
+                pdfUrl = pdfFile.getFileUrl(DeclareBookActivity.this);
+
+                isUpload = false;
+            }
+
+            @Override
+            public void onProgress(Integer value) {
+                // 返回的上传进度（百分比）
+                ViewGroup.LayoutParams layoutParams = progress_bar.getLayoutParams();
+                layoutParams.width = value * 5;
+                progress_bar.setLayoutParams(layoutParams);
+                progress_text.setText(value+"%");
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+                isUpload = false;
+                ToastView toast = new ToastView(DeclareBookActivity.this, "电子书上传失败：" + s);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
+        });
     }
 
     /**
@@ -203,13 +278,14 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
         book.setCost(Integer.parseInt(book_price.getText().toString()));
         book.setPhoto01(photoUrl01);
         book.setPhoto02(photoUrl02);
+        book.setBookUrl(pdfUrl);
         book.setPayTime(0);
         book.setScanTime(0);
 
         book.save(this, new SaveListener() {
             @Override
             public void onSuccess() {
-
+                isUpload = false;
                 AddCategorySum();
                 if (dialog.isShowing()) dialog.dismiss();
                 ToastView toast = new ToastView(DeclareBookActivity.this, "电子书发布成功");
@@ -220,6 +296,7 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
 
             @Override
             public void onFailure(int i, String s) {
+                isUpload = false;
                 if (dialog.isShowing()) dialog.dismiss();
                 ToastView toast = new ToastView(DeclareBookActivity.this, "电子书发布失败：" + s);
                 toast.setGravity(Gravity.CENTER, 0, 0);
@@ -240,10 +317,10 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
             @Override
             public void onSuccess(List<BookCategory> list) {
 
-                if (list.size() != 0){
+                if (list.size() != 0) {
 
                     BookCategory category = list.get(0);
-                    category.setSum(category.getSum()+1);
+                    category.setSum(category.getSum() + 1);
                     category.update(DeclareBookActivity.this, category.getObjectId(), new UpdateListener() {
                         @Override
                         public void onSuccess() {
@@ -255,8 +332,7 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
 
                         }
                     });
-                }
-                else{
+                } else {
                     BookCategory category = new BookCategory();
                     category.setTitle(book_category);
                     category.setSum(1);
@@ -281,6 +357,23 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
         });
     }
 
+    /**
+     * 打开文件管理器
+     */
+    private void showFileChooser() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("application/pdf");
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+
+        try {
+            startActivityForResult( Intent.createChooser(intent, "选择PDF文件"), MyConstant.FILE_SELECT_CODE);
+        } catch (android.content.ActivityNotFoundException ex) {
+            ToastView toast = new ToastView(DeclareBookActivity.this, "请先安装一个文件管理器");
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -303,6 +396,40 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
                 }
                 break;
             }
+            case MyConstant.FILE_SELECT_CODE:
+
+                if (resultCode == RESULT_OK) {
+
+                    // Get the Uri of the selected file
+                    Uri uri = data.getData();
+                    pdfPath = UriUtils.getRealFilePath(this, uri);
+
+                    String tip = "你确定要上传《"+ FileUtils.getFileName(pdfPath) + "》吗";
+
+                    new AlertDialog.Builder(DeclareBookActivity.this).setTitle("提示")       //设置标题
+                            .setMessage(tip)        //设置显示的内容
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                    ViewGroup.LayoutParams layoutParams = upload_book.getLayoutParams();
+                                    layoutParams.height = layoutParams.height * 2;
+                                    upload_book.setLayoutParams(layoutParams);
+                                    upload_progress.setVisibility(View.VISIBLE);
+
+                                    uploadPdfFile();
+                                }
+                            })
+                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
+
+
+                }
+                break;
             default:
                 break;
         }

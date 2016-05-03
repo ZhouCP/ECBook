@@ -45,4 +45,7 @@
     <string name="filter_top_price">最贵</string>
     <string name="filter_cheapest">最便宜</string>
 
+    <string name="gooddetail_buy">立即下载</string>
+    <string name="gooddetail_collect">加入收藏</string>
+
 </resources>

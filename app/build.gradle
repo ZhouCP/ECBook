@@ -27,10 +27,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
     //bmob-sdk ：Bmob的android sdk包
-    compile 'cn.bmob.android:bmob-sdk:3.4.3'
+    compile 'cn.bmob.android:bmob-sdk:3.4.6'
     compile 'com.squareup.okhttp:okhttp:2.4.0'
     compile 'com.squareup.okio:okio:1.4.0'
     compile 'com.android.support:support-v4:23.2.1'
-    compile files('libs/universal-image-loader-1.9.2_sources.jar')
-    compile files('libs/photoview-library-1.2.2.jar')
 }

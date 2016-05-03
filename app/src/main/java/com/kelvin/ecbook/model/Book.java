@@ -19,6 +19,8 @@ public class Book extends BmobObject {
     private String photo01;
     private String photo02;
 
+    private String bookUrl;
+
     public String getDelcarerId() {
         return delcarerId;
     }
@@ -81,5 +83,13 @@ public class Book extends BmobObject {
 
     public void setPhoto01(String photo01) {
         this.photo01 = photo01;
+    }
+
+    public String getBookUrl() {
+        return bookUrl;
+    }
+
+    public void setBookUrl(String bookUrl) {
+        this.bookUrl = bookUrl;
     }
 }

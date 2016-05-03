@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/body">
+    android:background="@drawable/body"
+    android:orientation="vertical" >
+
+    <include
+        android:id="@+id/goodslist_navbar"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        layout="@layout/top_view" />
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:layout_below="@+id/goodslist_navbar"
+        android:layout_marginBottom="55dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-            <include
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                layout="@layout/top_view" />
 
             <LinearLayout
                 android:layout_width="fill_parent"
@@ -51,7 +55,7 @@
                         android:textColor="#000000"
                         android:textSize="15dp"
                         android:textStyle="bold"
-                        android:text="添加封面描述"/>
+                        android:text="封面描述"/>
 
                     <LinearLayout
                         android:layout_width="fill_parent"
@@ -81,12 +85,66 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/download_layout"
+                android:layout_width="fill_parent"
+                android:layout_height="90dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/body_cont"
+                android:gravity="center_vertical"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <RelativeLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp">
+
+                    <TextView
+                        android:id="@+id/download_tip"
+                        android:layout_width="wrap_content"
+                        android:layout_height="22dp"
+                        android:layout_marginLeft="20dp"
+                        android:textColor="#000000"
+                        android:textSize="16sp"
+                        android:textStyle="bold"
+                        android:text="下载中"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginBottom="2dp"/>
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/upload_progress"
+                    android:layout_width="fill_parent"
+                    android:layout_height="45dp">
+
+                    <View
+                        android:id="@+id/progress_bar"
+                        android:layout_width="0dp"
+                        android:layout_height="4dp"
+                        android:background="#00e000"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="40dp"
+                        android:layout_marginTop="8dp"/>
+
+                    <TextView
+                        android:id="@+id/progress_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="16sp"
+                        android:text="0%"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="10dp"/>
+
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:background="@drawable/body_cont"
                 android:gravity="center_vertical"
-                android:orientation="vertical" >
+                android:orientation="vertical">
 
                 <FrameLayout
                     android:layout_width="fill_parent"
@@ -100,20 +158,20 @@
                         android:textSize="15sp"
                         android:layout_marginLeft="10dp"/>
 
-                    <EditText
-                        android:id="@+id/input_title"
+                    <TextView
+                        android:id="@+id/show_title"
                         android:layout_width="fill_parent"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center_vertical"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
                         android:layout_marginLeft="55dp"
+                        android:layout_marginRight="10dp"
                         android:background="#ffffff"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:singleLine="true"
                         android:textColor="#000000"
                         android:maxLength="20"
-                        android:textSize="16dp"
-                        android:hint="填写电子书标题"/>
+                        android:textSize="16dp"/>
                 </FrameLayout>
 
                 <View
@@ -133,44 +191,20 @@
                         android:textSize="15sp"
                         android:layout_marginLeft="10dp"/>
 
-                    <Spinner
-                        android:id="@+id/spinner_category"
+                    <TextView
+                        android:id="@+id/show_category"
                         android:layout_width="fill_parent"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="45dp"
-                        android:background="#ffffff"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:password="true"
-                        android:singleLine="true"
-                        android:textColor="#000000"
-                        android:maxLength="20"
-                        android:textSize="16dp"
-                        android:entries="@array/category"/>
-
-                </FrameLayout>
-
-                <FrameLayout
-                    android:id="@+id/other_category"
-                    android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:visibility="gone">
-
-                    <EditText
-                        android:id="@+id/input_category"
-                        android:layout_width="fill_parent"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center_vertical"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
                         android:layout_marginLeft="55dp"
+                        android:layout_marginRight="10dp"
                         android:background="#ffffff"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:singleLine="true"
                         android:textColor="#000000"
                         android:maxLength="20"
-                        android:textSize="16dp"
-                        android:hint="填写其他类别" />
+                        android:textSize="16dp"/>
 
                 </FrameLayout>
 
@@ -191,83 +225,22 @@
                         android:textSize="15sp"
                         android:layout_marginLeft="10dp"/>
 
-                    <EditText
-                        android:id="@+id/input_price"
+                    <TextView
+                        android:id="@+id/show_price"
                         android:layout_width="fill_parent"
-                        android:layout_height="40dp"
-                        android:layout_gravity="center_vertical"
+                        android:layout_height="48dp"
+                        android:gravity="center_vertical"
                         android:layout_marginLeft="55dp"
+                        android:layout_marginRight="10dp"
                         android:background="#ffffff"
                         android:paddingLeft="10dp"
                         android:paddingRight="10dp"
                         android:singleLine="true"
                         android:textColor="#000000"
                         android:maxLength="20"
-                        android:textSize="16dp"
-                        android:inputType="number"
-                        android:hint="填写下载所需的EC币"/>
+                        android:textSize="16dp"/>
 
                 </FrameLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/upload_book"
-                android:layout_width="fill_parent"
-                android:layout_height="55dp"
-                android:layout_margin="10dp"
-                android:background="@drawable/body_cont"
-                android:orientation="vertical" >
-
-                <RelativeLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="50dp" >
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="上传电子书（仅限pdf）"
-                        android:textSize="15sp"
-                        android:layout_marginLeft="10dp"
-                        android:layout_centerVertical="true"/>
-
-                    <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginRight="10dp"
-                        android:src="@drawable/accsessory_arrow_right"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true" />
-
-                </RelativeLayout>
-
-                <RelativeLayout
-                    android:id="@+id/upload_progress"
-                    android:layout_width="fill_parent"
-                    android:layout_height="50dp"
-                    android:visibility="gone">
-
-                    <View
-                        android:id="@+id/progress_bar"
-                        android:layout_width="0dp"
-                        android:layout_height="4dp"
-                        android:background="#00e000"
-                        android:layout_centerVertical="true"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="40dp"/>
-
-                    <TextView
-                        android:id="@+id/progress_text"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        android:text="0%"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginRight="10dp"/>
-
-                </RelativeLayout>
-
 
             </LinearLayout>
 
@@ -275,4 +248,48 @@
 
     </ScrollView>
 
-</LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_gravity="bottom"
+        android:background="@drawable/foot_bg"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true">
+
+        <ImageView
+            android:id="@+id/collection_button"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_weight="0.2"
+            android:src="@drawable/item_info_collection_disabled_btn" />
+
+        <TextView
+            android:id="@+id/download_now"
+            android:layout_width="83dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="5dp"
+            android:layout_weight="0.3"
+            android:background="@drawable/button_orange"
+            android:gravity="center"
+            android:text="@string/gooddetail_buy"
+            android:textColor="#ffffff"
+            android:textSize="16dp" />
+
+        <TextView
+            android:id="@+id/add_to_cart"
+            android:layout_width="83dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="5dp"
+            android:layout_weight="0.3"
+            android:background="@drawable/button_red"
+            android:gravity="center"
+            android:text="@string/gooddetail_collect"
+            android:textColor="#ffffff"
+            android:textSize="16dp"
+            android:layout_marginRight="20dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

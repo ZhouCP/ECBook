@@ -13,6 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kelvin.ecbook.R;
+import com.kelvin.ecbook.activity.BookDetailActivity;
 import com.kelvin.ecbook.activity.ProductListActivity;
 import com.kelvin.ecbook.model.Book;
 import com.kelvin.ecbook.model.BookCategory;
@@ -90,7 +91,7 @@ public class BookCategoryAdapter extends BaseAdapter{
         query02.setLimit(2);
         query02.findObjects(context, new FindListener<Book>() {
             @Override
-            public void onSuccess(List<Book> list) {
+            public void onSuccess(final List<Book> list) {
 
                 TextView title_two = (TextView) view.findViewById(R.id.good_cell_name_two);
                 TextView price_two = (TextView) view.findViewById(R.id.good_cell_price_two);
@@ -115,6 +116,27 @@ public class BookCategoryAdapter extends BaseAdapter{
                     imageLoader.displayImage(list.get(1).getPhoto01(), photo_three,
                             ImageLoadOptions.getOptions());
                 }
+
+
+                LinearLayout cell_two = (LinearLayout) view.findViewById(R.id.good_cell_two);
+                cell_two.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, BookDetailActivity.class);
+                        intent.putExtra("bookId",list.get(0).getObjectId());
+                        context.startActivity(intent);
+                    }
+                });
+
+                LinearLayout cell_three = (LinearLayout) view.findViewById(R.id.good_cell_three);
+                cell_three.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(context, BookDetailActivity.class);
+                        intent.putExtra("bookId",list.get(1).getObjectId());
+                        context.startActivity(intent);
+                    }
+                });
             }
 
             @Override

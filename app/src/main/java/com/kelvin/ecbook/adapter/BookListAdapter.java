@@ -1,6 +1,7 @@
 package com.kelvin.ecbook.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kelvin.ecbook.R;
+import com.kelvin.ecbook.activity.BookDetailActivity;
 import com.kelvin.ecbook.model.BookCellModel;
 import com.kelvin.ecbook.utils.ImageLoadOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -48,7 +50,7 @@ public class BookListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 
         final View view = LayoutInflater.from(mContext).inflate(R.layout.product_list_cell, null);
 
@@ -89,6 +91,28 @@ public class BookListAdapter extends BaseAdapter {
             LinearLayout cell_two = (LinearLayout) view.findViewById(R.id.good_item_two);
             cell_two.setVisibility(View.INVISIBLE);
         }
+
+
+        LinearLayout cell_one = (LinearLayout) view.findViewById(R.id.good_item_one);
+        LinearLayout cell_two = (LinearLayout) view.findViewById(R.id.good_item_two);
+
+        cell_one.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, BookDetailActivity.class);
+                intent.putExtra("bookId", mData.get(position).getBook_one().getObjectId());
+                mContext.startActivity(intent);
+            }
+        });
+
+        cell_two.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, BookDetailActivity.class);
+                intent.putExtra("bookId",mData.get(position).getBook_two().getObjectId());
+                mContext.startActivity(intent);
+            }
+        });
 
         return view;
     }
