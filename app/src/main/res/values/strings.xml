@@ -48,4 +48,10 @@
     <string name="gooddetail_buy">立即下载</string>
     <string name="gooddetail_collect">加入收藏</string>
 
+    <string name="collection_nothing">你还没有任何收藏</string>
+    <string name="collection_add">赶紧去逛逛吧！加一些收藏</string>
+
+    <string name="collection_remove">移除</string>
+    <string name="collection_removeAll">全部移除</string>
+
 </resources>

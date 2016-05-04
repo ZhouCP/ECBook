@@ -44,4 +44,5 @@ public class EcBookUser extends BmobObject {
     public void setAvatar(String avatar) {
         this.avatar = avatar;
     }
+
 }

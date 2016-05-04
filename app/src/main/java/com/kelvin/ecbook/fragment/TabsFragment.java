@@ -29,6 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.kelvin.ecbook.R;
+import com.kelvin.ecbook.config.StaticData;
 
 public class TabsFragment extends Fragment {
 
@@ -49,7 +50,7 @@ public class TabsFragment extends Fragment {
     private SharedPreferences.Editor editor;
     IndexFragment homeFragment;
     CategoryFragment searchFragment;
-    ShoppingCartFragment shoppingCartFragment;
+    CollectionFragment collectionFragment;
     ProfileFragment profileFragment;
 
     public TabsFragment() {
@@ -168,9 +169,9 @@ public class TabsFragment extends Fragment {
         }
         else if (tabName == "tab_three")
         {
-            shoppingCartFragment = new ShoppingCartFragment();
+            collectionFragment = new CollectionFragment();
             FragmentTransaction localFragmentTransaction = getFragmentManager().beginTransaction();
-            localFragmentTransaction.replace(R.id.fragment_container, shoppingCartFragment, "tab_three");
+            localFragmentTransaction.replace(R.id.fragment_container, collectionFragment, "tab_three");
             localFragmentTransaction.commit();
 
             this.tab_one.setImageResource(R.drawable.footer_home_icon);
@@ -236,13 +237,13 @@ public class TabsFragment extends Fragment {
         {
             if (null != data)
             {
-                if (null == shoppingCartFragment)
+                if (null == collectionFragment)
                 {
-                    shoppingCartFragment = new ShoppingCartFragment();
+                    collectionFragment = new CollectionFragment();
                 }
 
                 FragmentTransaction localFragmentTransaction = getFragmentManager().beginTransaction();
-                localFragmentTransaction.replace(R.id.fragment_container, shoppingCartFragment, "tab_three");
+                localFragmentTransaction.replace(R.id.fragment_container, collectionFragment, "tab_three");
                 localFragmentTransaction.commit();
 
                 this.tab_one.setImageResource(R.drawable.footer_home_icon);
@@ -268,13 +269,13 @@ public class TabsFragment extends Fragment {
 
     public static void setShoppingcartNum() {
 
-        /**
-        if(ShoppingCartModel.getInstance().goods_num == 0) {
+
+        if (StaticData.NUM_COLLECTIONS == 0) {
             shopping_cart_num_bg.setVisibility(View.GONE);
         } else {
             shopping_cart_num_bg.setVisibility(View.VISIBLE);
-            shopping_cart_num.setText(ShoppingCartModel.getInstance().goods_num+"");
-        }**/
+            shopping_cart_num.setText(StaticData.NUM_COLLECTIONS + "");
+        }
     }
 
 

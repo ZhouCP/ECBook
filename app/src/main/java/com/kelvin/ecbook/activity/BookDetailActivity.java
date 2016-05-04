@@ -1,7 +1,9 @@
 package com.kelvin.ecbook.activity;
 
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -15,18 +17,23 @@ import android.widget.TextView;
 
 import com.kelvin.ecbook.R;
 import com.kelvin.ecbook.config.MyConstant;
+import com.kelvin.ecbook.config.StaticData;
 import com.kelvin.ecbook.model.Book;
+import com.kelvin.ecbook.model.Collection;
 import com.kelvin.ecbook.utils.ImageLoadOptions;
 import com.kelvin.ecbook.view.toast.ToastView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.io.File;
+import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.DownloadFileListener;
+import cn.bmob.v3.listener.FindListener;
 import cn.bmob.v3.listener.GetListener;
+import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 
 /**
@@ -44,7 +51,7 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
 
     private TextView show_title,show_category,show_price;
 
-    private TextView download;
+    private TextView download,collect;
 
     private LinearLayout download_layout;
     private TextView progress_text,download_tip;
@@ -70,7 +77,9 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
         getBookData();
 
         download = (TextView) findViewById(R.id.download_now);
+        collect = (TextView) findViewById(R.id.add_to_collection);
         download.setOnClickListener(this);
+        collect.setOnClickListener(this);
 
         download_layout = (LinearLayout) findViewById(R.id.download_layout);
         progress_text = (TextView) findViewById(R.id.progress_text);
@@ -183,25 +192,38 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
                     finish();
                     break;
                 case R.id.download_now:
-                    String tip = "你确定要下载《" + book.getTitle() + "》吗";
-                    download_tip.setText("下载中");
-                    new AlertDialog.Builder(BookDetailActivity.this).setTitle("提示")       //设置标题
-                            .setMessage(tip)        //设置显示的内容
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                    SharedPreferences sh = getSharedPreferences("userInfo", Activity.MODE_PRIVATE);
+                    String userid = sh.getString("objectid","");
 
-                                    isDownloading = true;
-                                    download_layout.setVisibility(View.VISIBLE);
-                                    dowloadBook();
-                                }
-                            })
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                    if (userid.equals("")){
+                        Intent intent = new Intent(this, SigninActivity.class);
+                        startActivity(intent);
+                        overridePendingTransition(R.anim.push_buttom_in,R.anim.push_buttom_out);
+                    }
+                    else {
+                        String tip = "你确定要下载《" + book.getTitle() + "》吗";
+                        download_tip.setText("下载中");
+                        new AlertDialog.Builder(BookDetailActivity.this).setTitle("提示")       //设置标题
+                                .setMessage(tip)        //设置显示的内容
+                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
 
-                                }
-                            }).show();
+                                        isDownloading = true;
+                                        download_layout.setVisibility(View.VISIBLE);
+                                        dowloadBook();
+                                    }
+                                })
+                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+
+                                    }
+                                }).show();
+                    }
+                    break;
+                case R.id.add_to_collection:
+                    addToCollections();
                     break;
             }
         }
@@ -248,5 +270,67 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
                 //toast("下载失败："+code+","+msg);
             }
         });
+    }
+
+
+    /**
+     * 添加进收藏
+     */
+    private void addToCollections(){
+
+        SharedPreferences sh = getSharedPreferences("userInfo", Activity.MODE_PRIVATE);
+        final String userid = sh.getString("objectid","");
+
+        if (userid.equals("")){
+            Intent intent = new Intent(this, SigninActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.push_buttom_in, R.anim.push_buttom_out);
+        }
+        else{
+
+            BmobQuery<Collection> query = new BmobQuery<>();
+            query.addWhereEqualTo("book",bookId);
+            query.setLimit(1);
+            query.findObjects(this, new FindListener<Collection>() {
+                @Override
+                public void onSuccess(List<Collection> list) {
+
+                    if (list.size() == 0) {
+                        Collection collection = new Collection();
+                        collection.setCollector(userid);
+                        collection.setBook(bookId);
+                        collection.save(BookDetailActivity.this, new SaveListener() {
+                            @Override
+                            public void onSuccess() {
+                                ToastView toast = new ToastView(BookDetailActivity.this, "加入收藏成功");
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
+
+                                StaticData.NUM_COLLECTIONS++;
+                            }
+
+                            @Override
+                            public void onFailure(int i, String s) {
+                                ToastView toast = new ToastView(BookDetailActivity.this, "加入收藏失败："+s);
+                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                toast.show();
+                            }
+                        });
+                    }
+                    else{
+                        ToastView toast = new ToastView(BookDetailActivity.this, "你已经收藏该书了哦");
+                        toast.setGravity(Gravity.CENTER, 0, 0);
+                        toast.show();
+                    }
+                }
+
+                @Override
+                public void onError(int i, String s) {
+
+                }
+            });
+
+
+        }
     }
 }

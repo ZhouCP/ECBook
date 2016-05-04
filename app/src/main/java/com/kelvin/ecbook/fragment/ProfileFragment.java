@@ -153,7 +153,7 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
         manage.setOnClickListener(this);
         help.setOnClickListener(this);
 
-        uid = shared.getString("uid", "");
+        uid = shared.getString("objectid", "");
         photo.setOnClickListener(this);
 
         return view;
@@ -165,7 +165,7 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
         super.onResume();
 
         setUserInfo();
-        uid = shared.getString("email", "");
+        uid = shared.getString("objectid", "");
         if (!uid.equals("")) {
             getUserInfo();
             camera.setVisibility(View.VISIBLE);
@@ -201,7 +201,7 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
 
         if (uid != ""){
             BmobQuery<EcBookUser> query = new BmobQuery<EcBookUser>();
-            query.addWhereEqualTo("email", uid);
+            query.addWhereEqualTo("objectId", uid);
             query.setLimit(1);
             query.findObjects(getActivity(), new FindListener<EcBookUser>() {
                 @Override

@@ -278,7 +278,7 @@
             android:textSize="16dp" />
 
         <TextView
-            android:id="@+id/add_to_cart"
+            android:id="@+id/add_to_collection"
             android:layout_width="83dp"
             android:layout_height="40dp"
             android:layout_marginLeft="5dp"
