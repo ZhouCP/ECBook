@@ -20,6 +20,7 @@ import com.kelvin.ecbook.config.MyConstant;
 import com.kelvin.ecbook.config.StaticData;
 import com.kelvin.ecbook.model.Book;
 import com.kelvin.ecbook.model.Collection;
+import com.kelvin.ecbook.model.Download;
 import com.kelvin.ecbook.utils.ImageLoadOptions;
 import com.kelvin.ecbook.view.toast.ToastView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -201,25 +202,63 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
                         overridePendingTransition(R.anim.push_buttom_in,R.anim.push_buttom_out);
                     }
                     else {
-                        String tip = "你确定要下载《" + book.getTitle() + "》吗";
-                        download_tip.setText("下载中");
-                        new AlertDialog.Builder(BookDetailActivity.this).setTitle("提示")       //设置标题
-                                .setMessage(tip)        //设置显示的内容
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
 
-                                        isDownloading = true;
-                                        download_layout.setVisibility(View.VISIBLE);
-                                        dowloadBook();
-                                    }
-                                })
-                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                        BmobQuery<Download> downloadBmobQuery = new BmobQuery<>();
+                        downloadBmobQuery.addWhereEqualTo("downloader",userid);
+                        downloadBmobQuery.addWhereEqualTo("book", bookId);
+                        downloadBmobQuery.findObjects(BookDetailActivity.this, new FindListener<Download>() {
+                            @Override
+                            public void onSuccess(List<Download> list) {
 
-                                    }
-                                }).show();
+                                if (list.size() == 0) {
+                                    String tip = "你确定要下载《" + book.getTitle() + "》吗，此行为将扣除" + book.getCost() + "个EC币";
+                                    new AlertDialog.Builder(BookDetailActivity.this).setTitle("提示")       //设置标题
+                                            .setMessage(tip)        //设置显示的内容
+                                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                    download_tip.setText("下载中");
+                                                    isDownloading = true;
+                                                    download_layout.setVisibility(View.VISIBLE);
+                                                    dowloadBook();
+                                                }
+                                            })
+                                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                }
+                                            }).show();
+                                } else {
+                                    String tip = "你已经下载过《" + book.getTitle() + "》了，是否重新下载";
+                                    new AlertDialog.Builder(BookDetailActivity.this).setTitle("提示")       //设置标题
+                                            .setMessage(tip)        //设置显示的内容
+                                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                    download_tip.setText("下载中");
+                                                    isDownloading = true;
+                                                    download_layout.setVisibility(View.VISIBLE);
+                                                    dowloadBook();
+                                                }
+                                            })
+                                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                                @Override
+                                                public void onClick(DialogInterface dialog, int which) {
+
+                                                }
+                                            }).show();
+                                }
+                            }
+
+                            @Override
+                            public void onError(int i, String s) {
+
+                            }
+                        });
+
                     }
                     break;
                 case R.id.add_to_collection:
@@ -261,6 +300,7 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
                 if (value == 100){
                     download_tip.setText("下载完成(" + MyConstant.BookDir + ")");
                     isDownloading = false;
+                    addDownloadRecord();
                     setBookDownloadAddOne();
                 }
             }
@@ -272,6 +312,31 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
         });
     }
 
+
+    /**
+     * 添加下载记录
+     */
+    private void addDownloadRecord(){
+
+        SharedPreferences sh = getSharedPreferences("userInfo", Activity.MODE_PRIVATE);
+        final String userid = sh.getString("objectid", "");
+
+        Download download = new Download();
+        download.setDownloader(userid);
+        download.setBook(bookId);
+
+        download.save(this, new SaveListener() {
+            @Override
+            public void onSuccess() {
+
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+
+            }
+        });
+    }
 
     /**
      * 添加进收藏

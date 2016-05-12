@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.kelvin.ecbook.R;
+import com.kelvin.ecbook.activity.MyDownloadActivity;
+import com.kelvin.ecbook.activity.MyUploadActivity;
 import com.kelvin.ecbook.activity.SigninActivity;
 import com.kelvin.ecbook.model.EcBookUser;
 import com.kelvin.ecbook.model.EcBookUserModel;
@@ -261,21 +263,18 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
             case R.id.profile_upload_history:
 
                 //我上传的
-                Toast.makeText(getActivity(),"我上传的",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(),"我上传的",Toast.LENGTH_SHORT).show();
 
-                /**
                 if (uid.equals("")) {
                     isRefresh = true;
-                    intent = new Intent(getActivity(), A0_SigninActivity.class);
+                    intent = new Intent(getActivity(), SigninActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.push_buttom_in,R.anim.push_buttom_out);
                 } else {
-                    intent = new Intent(getActivity(), E4_HistoryActivity.class);
-                    intent.putExtra("flag", "await_pay");
-                    startActivityForResult(intent, 2);
-                    getActivity().overridePendingTransition(R.anim.push_right_in,
-                            R.anim.push_right_out);
-                }**/
+                    intent = new Intent(getActivity(), MyUploadActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+                }
                 break;
             case R.id.profile_credit:
 
@@ -298,20 +297,17 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
             case R.id.profile_download_history:
 
                 //下载历史
-                Toast.makeText(getActivity(),"下载历史",Toast.LENGTH_SHORT).show();
-                /**
+                //Toast.makeText(getActivity(),"下载历史",Toast.LENGTH_SHORT).show();
                 if (uid.equals("")) {
                     isRefresh = true;
-                    intent = new Intent(getActivity(), A0_SigninActivity.class);
+                    intent = new Intent(getActivity(), SigninActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.push_buttom_in,R.anim.push_buttom_out);
                 } else {
-                    intent = new Intent(getActivity(), E4_HistoryActivity.class);
-                    intent.putExtra("flag", "shipped");
-                    startActivityForResult(intent, 2);
-                    getActivity().overridePendingTransition(R.anim.push_right_in,
-                            R.anim.push_right_out);
-                }**/
+                    intent = new Intent(getActivity(), MyDownloadActivity.class);
+                    startActivity(intent);
+                    getActivity().overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+                }
                 break;
             case R.id.profile_detail:
 

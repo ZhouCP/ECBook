@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.kelvin.ecbook.R;
 import com.kelvin.ecbook.adapter.CollectionAdapter;
+import com.kelvin.ecbook.config.CollectionType;
 import com.kelvin.ecbook.config.StaticData;
 import com.kelvin.ecbook.model.Collection;
 import com.kelvin.ecbook.view.xlistview.XListViewCart;
@@ -64,7 +65,7 @@ public class CollectionFragment extends Fragment implements XListViewCart.IXList
         no_collections = (FrameLayout) mainView.findViewById(R.id.collections_null);
 
         collections = new ArrayList<>();
-        adapter = new CollectionAdapter(mContext,collections);
+        adapter = new CollectionAdapter(mContext,collections, CollectionType.COLLECTION);
         getMyCollections();
 
         xListView = (XListViewCart) mainView.findViewById(R.id.collection_list);
@@ -103,7 +104,7 @@ public class CollectionFragment extends Fragment implements XListViewCart.IXList
                     no_collections.setVisibility(View.VISIBLE);
                 }
                 collections = list;
-                adapter = new CollectionAdapter(mContext,collections);
+                adapter = new CollectionAdapter(mContext,collections,CollectionType.COLLECTION);
                 xListView.setAdapter(adapter);
             }
 

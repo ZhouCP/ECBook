@@ -23,7 +23,7 @@ public class MyProgressDialog {
 		TextView text = (TextView) view.findViewById(R.id.progress_message);
 		text.setText(message);
 		ImageView loadingImage = (ImageView) view.findViewById(R.id.progress_view);
-		loadingImage.setImageResource(R.anim.loading_animation);
+		loadingImage.setImageResource(R.drawable.loading_animation);
 		animationDrawable = (AnimationDrawable)loadingImage.getDrawable();
         if(animationDrawable!=null){
             animationDrawable.setOneShot(false);

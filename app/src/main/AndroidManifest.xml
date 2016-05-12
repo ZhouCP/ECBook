@@ -41,6 +41,9 @@
         <activity android:name=".activity.ProductListActivity"/>
         <activity android:name=".activity.BookDetailActivity"/>
 
+        <activity android:name=".activity.MyUploadActivity"/>
+        <activity android:name=".activity.MyDownloadActivity"/>
+
     </application>
 
 </manifest>

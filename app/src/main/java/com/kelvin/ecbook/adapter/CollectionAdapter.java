@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.kelvin.ecbook.R;
 import com.kelvin.ecbook.activity.BookDetailActivity;
+import com.kelvin.ecbook.config.CollectionType;
 import com.kelvin.ecbook.fragment.CollectionFragment;
 import com.kelvin.ecbook.model.Book;
 import com.kelvin.ecbook.model.Collection;
@@ -40,12 +41,14 @@ public class CollectionAdapter extends BaseAdapter {
     private Context mContext;
     private List<Collection> mData;
     private Book[] books;
+    private int type;
 
-    public CollectionAdapter(Context context,List<Collection> mData){
+    public CollectionAdapter(Context context,List<Collection> mData,int type){
 
         this.mContext = context;
         this.mData = mData;
         this.books = new Book[mData.size()];
+        this.type = type;
     }
 
     @Override
@@ -100,50 +103,93 @@ public class CollectionAdapter extends BaseAdapter {
                 desc.setText("类别：" + books[position].getCategory() + "   下载量：" + books[position].getPayTime());
 
                 Button remove = (Button)view.findViewById(R.id.collection_remove);
-                remove.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
+                if (type == CollectionType.COLLECTION) {     //收藏夹
+                    remove.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
 
-                        new AlertDialog.Builder(mContext).setTitle("提示")       //设置标题
-                                .setMessage("你确定要删除《" + books[position].getTitle() + "》这个收藏吗？")
-                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                            new AlertDialog.Builder(mContext).setTitle("提示")       //设置标题
+                                    .setMessage("你确定要删除《" + books[position].getTitle() + "》这个收藏吗？")
+                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
 
-                                        mData.get(position).delete(mContext, mData.get(position).getObjectId(),
-                                                new DeleteListener() {
-                                                    @Override
-                                                    public void onSuccess() {
-                                                        ToastView toast = new ToastView(mContext, "删除成功");
-                                                        toast.setGravity(Gravity.CENTER, 0, 0);
-                                                        toast.show();
+                                            mData.get(position).delete(mContext, mData.get(position).getObjectId(),
+                                                    new DeleteListener() {
+                                                        @Override
+                                                        public void onSuccess() {
+                                                            ToastView toast = new ToastView(mContext, "删除成功");
+                                                            toast.setGravity(Gravity.CENTER, 0, 0);
+                                                            toast.show();
 
-                                                        CollectionFragment.collections.remove(position);
-                                                        CollectionFragment.adapter.notifyDataSetChanged();
+                                                            CollectionFragment.collections.remove(position);
+                                                            CollectionFragment.adapter.notifyDataSetChanged();
 
-                                                        if (CollectionFragment.collections.size() == 0) {
-                                                            CollectionFragment.top_view.setVisibility(View.GONE);
-                                                            CollectionFragment.no_collections.setVisibility(View.VISIBLE);
+                                                            if (CollectionFragment.collections.size() == 0) {
+                                                                CollectionFragment.top_view.setVisibility(View.GONE);
+                                                                CollectionFragment.no_collections.setVisibility(View.VISIBLE);
+                                                            }
                                                         }
-                                                    }
 
-                                                    @Override
-                                                    public void onFailure(int i, String s) {
-                                                        ToastView toast = new ToastView(mContext, "删除失败：" + s);
-                                                        toast.setGravity(Gravity.CENTER, 0, 0);
-                                                        toast.show();
-                                                    }
-                                                });
-                                    }
-                                })
-                                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
+                                                        @Override
+                                                        public void onFailure(int i, String s) {
+                                                            ToastView toast = new ToastView(mContext, "删除失败：" + s);
+                                                            toast.setGravity(Gravity.CENTER, 0, 0);
+                                                            toast.show();
+                                                        }
+                                                    });
+                                        }
+                                    })
+                                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
 
-                                    }
-                                }).show();
-                    }
-                });
+                                        }
+                                    }).show();
+                        }
+                    });
+                }
+                else if (type == CollectionType.MYUPLOAD){     //我上传的
+                    remove.setText("撤回");
+                    remove.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            new AlertDialog.Builder(mContext).setTitle("提示")       //设置标题
+                                    .setMessage("你确定要撤回《" + books[position].getTitle() + "》的发布吗，此行为将会扣除3个EC币？")
+                                    .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                            Book book = new Book();
+                                            book.delete(mContext, mData.get(position).getBook(), new DeleteListener() {
+                                                @Override
+                                                public void onSuccess() {
+                                                    ToastView toast = new ToastView(mContext, "撤回成功");
+                                                    toast.setGravity(Gravity.CENTER, 0, 0);
+                                                    toast.show();
+                                                }
+
+                                                @Override
+                                                public void onFailure(int i, String s) {
+                                                    ToastView toast = new ToastView(mContext, "撤回失败：" + s);
+                                                    toast.setGravity(Gravity.CENTER, 0, 0);
+                                                    toast.show();
+                                                }
+                                            });
+                                        }
+                                    })
+                                    .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+
+                                        }
+                                    }).show();
+                        }
+                    });
+                }
+                else if (type == CollectionType.MYUPLOAD){
+                    remove.setVisibility(View.GONE);
+                }
 
 
                 LinearLayout book_content = (LinearLayout) view.findViewById(R.id.book_content);
