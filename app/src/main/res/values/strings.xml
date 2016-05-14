@@ -54,4 +54,8 @@
     <string name="collection_remove">移除</string>
     <string name="collection_removeAll">全部移除</string>
 
+    <string name="myupload_nothing">你还没有任何上传</string>
+    <string name="myupload_add">赶紧去上传一些电子书吧</string>
+    <string name="mydownload_nothing">你还没有任何下载</string>
+    <string name="mydownload_add">赶紧去下载一些电子书吧</string>
 </resources>

@@ -24,7 +24,7 @@ import cn.bmob.v3.listener.FindListener;
 /**
  * Created by Kelvin on 2016/5/12.
  */
-public class MyDownloadActivity extends Activity  implements XListViewCart.IXListViewListenerCart {
+public class MyDownloadActivity extends BaseActivity implements XListViewCart.IXListViewListenerCart {
 
     private ImageView back;
     private TextView title;

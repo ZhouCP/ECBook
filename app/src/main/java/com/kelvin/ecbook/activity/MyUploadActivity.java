@@ -25,7 +25,7 @@ import cn.bmob.v3.listener.FindListener;
 /**
  * Created by Kelvin on 2016/5/12.
  */
-public class MyUploadActivity extends Activity implements IXListViewListenerCart{
+public class MyUploadActivity extends BaseActivity implements IXListViewListenerCart{
 
     private ImageView back;
     private TextView title;

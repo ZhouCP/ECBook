@@ -3,6 +3,7 @@ package com.kelvin.ecbook.adapter;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 import com.kelvin.ecbook.R;
 import com.kelvin.ecbook.activity.BookDetailActivity;
 import com.kelvin.ecbook.config.CollectionType;
+import com.kelvin.ecbook.config.MyConstant;
 import com.kelvin.ecbook.fragment.CollectionFragment;
 import com.kelvin.ecbook.model.Book;
 import com.kelvin.ecbook.model.Collection;
@@ -27,6 +29,7 @@ import com.kelvin.ecbook.view.toast.ToastView;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
+import java.io.File;
 import java.util.List;
 
 import cn.bmob.v3.BmobQuery;
@@ -187,8 +190,22 @@ public class CollectionAdapter extends BaseAdapter {
                         }
                     });
                 }
-                else if (type == CollectionType.MYUPLOAD){
-                    remove.setVisibility(View.GONE);
+                else if (type == CollectionType.MYDOWNLOAD){
+                    //remove.setVisibility(View.GONE);
+                    remove.setText("打开");
+                    remove.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+
+                            String path =  MyConstant.BookDir + books[position].getTitle() + ".pdf";
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.addCategory(Intent.CATEGORY_DEFAULT);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                            Uri uri = Uri.fromFile(new File(path));
+                            intent.setDataAndType(uri, "application/pdf");
+                            mContext.startActivity(intent);
+                        }
+                    });
                 }
 
 

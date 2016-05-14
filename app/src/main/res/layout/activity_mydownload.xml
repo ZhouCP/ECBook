@@ -74,7 +74,7 @@
                     android:layout_marginRight="20dp"
                     android:layout_marginTop="20dp"
                     android:gravity="center"
-                    android:text="@string/collection_nothing"
+                    android:text="@string/mydownload_nothing"
                     android:textColor="#666666"
                     android:textSize="22dp"
                     android:textStyle="bold" />
@@ -83,7 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="@string/collection_add"
+                    android:text="@string/mydownload_add"
                     android:textColor="#999999"
                     android:textSize="15dp" />
             </LinearLayout>
