@@ -27,6 +27,7 @@ import com.kelvin.ecbook.R;
 import com.kelvin.ecbook.config.MyConstant;
 import com.kelvin.ecbook.model.Book;
 import com.kelvin.ecbook.model.BookCategory;
+import com.kelvin.ecbook.model.EcBookUser;
 import com.kelvin.ecbook.utils.FileUtils;
 import com.kelvin.ecbook.utils.ImageUtils;
 import com.kelvin.ecbook.utils.UriUtils;
@@ -39,6 +40,7 @@ import java.util.List;
 import cn.bmob.v3.BmobQuery;
 import cn.bmob.v3.datatype.BmobFile;
 import cn.bmob.v3.listener.FindListener;
+import cn.bmob.v3.listener.GetListener;
 import cn.bmob.v3.listener.SaveListener;
 import cn.bmob.v3.listener.UpdateListener;
 import cn.bmob.v3.listener.UploadFileListener;
@@ -286,6 +288,7 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
             @Override
             public void onSuccess() {
                 isUpload = false;
+                AddCreditNum();
                 AddCategorySum();
                 if (dialog.isShowing()) dialog.dismiss();
                 ToastView toast = new ToastView(DeclareBookActivity.this, "电子书发布成功");
@@ -352,6 +355,40 @@ public class DeclareBookActivity extends BaseActivity implements OnClickListener
 
             @Override
             public void onError(int i, String s) {
+
+            }
+        });
+    }
+
+    /**
+     * 积分加5
+     */
+    private void AddCreditNum(){
+
+        SharedPreferences sh = getSharedPreferences("userInfo", Activity.MODE_PRIVATE);
+        final String userid = sh.getString("objectid", "");
+
+        BmobQuery<EcBookUser> query = new BmobQuery<>();
+        query.getObject(this, userid, new GetListener<EcBookUser>() {
+            @Override
+            public void onSuccess(EcBookUser ecBookUser) {
+
+                ecBookUser.setCredit(ecBookUser.getCredit()+5);
+                ecBookUser.update(DeclareBookActivity.this, userid, new UpdateListener() {
+                    @Override
+                    public void onSuccess() {
+
+                    }
+
+                    @Override
+                    public void onFailure(int i, String s) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
 
             }
         });

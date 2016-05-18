@@ -8,8 +8,8 @@
     <string name="profile_credit">我的积分</string>
     <string name="profile_download">下载历史</string>
     <string name="profile_detail">个人信息</string>
-    <string name="profile_download_manager">下载管理</string>
-    <string name="profile_help">帮助</string>
+    <string name="profile_about">关于</string>
+    <string name="profile_exit">退出登录</string>
     <string name="profile_clickto_signin">点击此处登录</string>
 
     <string name="signin_title">用户登录</string>

@@ -21,6 +21,7 @@ import com.kelvin.ecbook.config.StaticData;
 import com.kelvin.ecbook.model.Book;
 import com.kelvin.ecbook.model.Collection;
 import com.kelvin.ecbook.model.Download;
+import com.kelvin.ecbook.model.EcBookUser;
 import com.kelvin.ecbook.utils.ImageLoadOptions;
 import com.kelvin.ecbook.view.toast.ToastView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -117,7 +118,7 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
      */
     private void setBookScanAddOne(){
 
-        book.setScanTime(book.getScanTime()+1);
+        book.setScanTime(book.getScanTime() + 1);
         book.update(this, book.getObjectId(), new UpdateListener() {
             @Override
             public void onSuccess() {
@@ -211,17 +212,14 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
                             public void onSuccess(List<Download> list) {
 
                                 if (list.size() == 0) {
-                                    String tip = "你确定要下载《" + book.getTitle() + "》吗，此行为将扣除" + book.getCost() + "个EC币";
+                                    String tip = "您确定要下载《" + book.getTitle() + "》吗，此行为将扣除" + book.getCost() + "个EC币";
                                     new AlertDialog.Builder(BookDetailActivity.this).setTitle("提示")       //设置标题
                                             .setMessage(tip)        //设置显示的内容
                                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                                 @Override
                                                 public void onClick(DialogInterface dialog, int which) {
 
-                                                    download_tip.setText("下载中");
-                                                    isDownloading = true;
-                                                    download_layout.setVisibility(View.VISIBLE);
-                                                    dowloadBook();
+                                                    judgeCreditIsEnough();
                                                 }
                                             })
                                             .setNegativeButton("取消", new DialogInterface.OnClickListener() {
@@ -231,7 +229,7 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
                                                 }
                                             }).show();
                                 } else {
-                                    String tip = "你已经下载过《" + book.getTitle() + "》了，是否重新下载";
+                                    String tip = "您已经下载过《" + book.getTitle() + "》了，是否重新下载";
                                     new AlertDialog.Builder(BookDetailActivity.this).setTitle("提示")       //设置标题
                                             .setMessage(tip)        //设置显示的内容
                                             .setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -266,6 +264,46 @@ public class BookDetailActivity extends BaseActivity implements OnClickListener{
                     break;
             }
         }
+    }
+
+    /**
+     * 判断积分是否足够
+     */
+    private void judgeCreditIsEnough(){
+
+        SharedPreferences sh = getSharedPreferences("userInfo", Activity.MODE_PRIVATE);
+        final String userid = sh.getString("objectid", "");
+
+        BmobQuery<EcBookUser> query = new BmobQuery<>();
+        query.getObject(this, userid, new GetListener<EcBookUser>() {
+            @Override
+            public void onSuccess(EcBookUser ecBookUser) {
+
+                if (ecBookUser.getCredit() < book.getCost()){
+                    String tip = "您的EC币不够下载哦";
+                    new AlertDialog.Builder(BookDetailActivity.this).setTitle("提示")       //设置标题
+                            .setMessage(tip)        //设置显示的内容
+                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+
+                                }
+                            }).show();
+                }
+                else{
+                    download_tip.setText("下载中");
+                    isDownloading = true;
+                    download_layout.setVisibility(View.VISIBLE);
+                    dowloadBook();
+                }
+            }
+
+            @Override
+            public void onFailure(int i, String s) {
+
+            }
+        });
+
     }
 
 

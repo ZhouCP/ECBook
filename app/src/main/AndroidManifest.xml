@@ -43,6 +43,10 @@
 
         <activity android:name=".activity.MyUploadActivity"/>
         <activity android:name=".activity.MyDownloadActivity"/>
+        <activity android:name=".activity.MyCreditActivity"/>
+        <activity android:name=".activity.MyInfoActivity"/>
+
+        <activity android:name=".activity.UpdateInfoActivity"/>
 
     </application>
 

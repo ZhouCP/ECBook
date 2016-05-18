@@ -13,6 +13,8 @@ public class EcBookUser extends BmobObject {
 
     private String avatar;
 
+    private int credit;
+
     public String getUsername() {
         return username;
     }
@@ -45,4 +47,11 @@ public class EcBookUser extends BmobObject {
         this.avatar = avatar;
     }
 
+    public int getCredit() {
+        return credit;
+    }
+
+    public void setCredit(int credit) {
+        this.credit = credit;
+    }
 }

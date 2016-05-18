@@ -1,11 +1,13 @@
 package com.kelvin.ecbook.fragment;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -15,10 +17,11 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.kelvin.ecbook.R;
+import com.kelvin.ecbook.activity.MyCreditActivity;
 import com.kelvin.ecbook.activity.MyDownloadActivity;
+import com.kelvin.ecbook.activity.MyInfoActivity;
 import com.kelvin.ecbook.activity.MyUploadActivity;
 import com.kelvin.ecbook.activity.SigninActivity;
 import com.kelvin.ecbook.model.EcBookUser;
@@ -51,24 +54,16 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
     private TextView name;
 
     private FrameLayout upload;
-    private TextView upload_num;
     private FrameLayout credit;
-    private TextView credit_num;
     private FrameLayout download;
-    private TextView download_num;
 
     private LinearLayout detail;
-    private LinearLayout manage;
-    private LinearLayout help;
-
-    private LinearLayout memberLevelLayout;
-    private TextView     memberLevelName;
-    private ImageView    memberLevelIcon;
+    private LinearLayout about;
+    private LinearLayout exit;
 
     private SharedPreferences shared;
     private SharedPreferences.Editor editor;
 
-    private ImageView setting;
     private String uid;
     private EcBookUserModel userModel;
     public static boolean isRefresh = false;
@@ -95,65 +90,37 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
 
         headView = LayoutInflater.from(getActivity()).inflate(R.layout.profile_head, null);
 
-        setting = (ImageView) view.findViewById(R.id.profile_setting);
-        setting.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-
-                /**
-                 * 设置
-                 *
-                 * Intent intent = new Intent(getActivity(), G0_SettingActivity.class);
-                 * startActivity(intent);
-                 * getActivity().overridePendingTransition(R.anim.push_right_in,
-                 * R.anim.push_right_out);
-                 *
-                 */
-
-            }
-        });
-
         xlistView = (XListView) view.findViewById(R.id.profile_list);
         xlistView.addHeaderView(headView);
 
         xlistView.setPullLoadEnable(false);
         xlistView.setRefreshTime();
-        xlistView.setXListViewListener(this,1);
+        xlistView.setXListViewListener(this, 1);
         xlistView.setAdapter(null);
 
-        memberLevelLayout = (LinearLayout)headView.findViewById(R.id.member_level_layout);
-        memberLevelName   = (TextView)headView.findViewById(R.id.member_level);
-        memberLevelIcon   = (ImageView)headView.findViewById(R.id.member_level_icon);
-
-        setting  = (ImageView) headView.findViewById(R.id.profile_head_setting);
         photo = (WebImageView) headView.findViewById(R.id.profile_head_photo);
         camera = (ImageView) headView.findViewById(R.id.profile_head_camera);
         name = (TextView) headView.findViewById(R.id.profile_head_name);
 
         upload = (FrameLayout) headView.findViewById(R.id.profile_upload_history);
-        upload_num = (TextView) headView.findViewById(R.id.profile_upload_history_num);
 
         credit = (FrameLayout) headView.findViewById(R.id.profile_credit);
-        credit_num = (TextView) headView.findViewById(R.id.profile_credit_num);
 
         download = (FrameLayout) headView.findViewById(R.id.profile_download_history);
-        download_num = (TextView) headView.findViewById(R.id.profile_download_history_num);
 
 
         detail = (LinearLayout) headView.findViewById(R.id.profile_detail);
-        manage = (LinearLayout) headView.findViewById(R.id.profile_download_manage);
-        help = (LinearLayout) headView.findViewById(R.id.profile_help);
+        about = (LinearLayout) headView.findViewById(R.id.profile_about);
+        exit = (LinearLayout) headView.findViewById(R.id.profile_exit);
 
-        setting.setOnClickListener(this);
         camera.setOnClickListener(this);
         name.setOnClickListener(this);
         upload.setOnClickListener(this);
         credit.setOnClickListener(this);
         download.setOnClickListener(this);
         detail.setOnClickListener(this);
-        manage.setOnClickListener(this);
-        help.setOnClickListener(this);
+        about.setOnClickListener(this);
+        exit.setOnClickListener(this);
 
         uid = shared.getString("objectid", "");
         photo.setOnClickListener(this);
@@ -201,30 +168,30 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
     // get User 信息
     public void getUserInfo(){
 
-        if (uid != ""){
-            BmobQuery<EcBookUser> query = new BmobQuery<EcBookUser>();
-            query.addWhereEqualTo("objectId", uid);
-            query.setLimit(1);
-            query.findObjects(getActivity(), new FindListener<EcBookUser>() {
-                @Override
-                public void onSuccess(List<EcBookUser> list) {
+        BmobQuery<EcBookUser> query = new BmobQuery<EcBookUser>();
+        query.addWhereEqualTo("objectId", uid);
+        query.setLimit(1);
+        query.findObjects(getActivity(), new FindListener<EcBookUser>() {
+            @Override
+            public void onSuccess(List<EcBookUser> list) {
 
-                    if (list.size() != 0) {
+                if (list.size() != 0) {
 
-                        userModel.setUser(list.get(0));
+                    userModel.setUser(list.get(0));
+                    userModel.saveUserInfoToLocal();
 
-                        setUserInfo();
-                    }
+                    setUserInfo();
                 }
+            }
 
-                @Override
-                public void onError(int i, String s) {
-                    ToastView toast = new ToastView(getActivity(), "获取用户信息失败：" + s);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-                }
-            });
-        }
+            @Override
+            public void onError(int i, String s) {
+                ToastView toast = new ToastView(getActivity(), "获取用户信息失败：" + s);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+            }
+        });
+
     }
 
 
@@ -233,22 +200,6 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
 
         Intent intent;
         switch(v.getId()) {
-            case R.id.profile_head_setting:
-
-                /**
-                uid = shared.getString("uid", "");
-                if (uid.equals("")) {
-                    isRefresh = true;
-                    intent = new Intent(getActivity(), A0_SigninActivity.class);
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.push_buttom_in,R.anim.push_buttom_out);
-                } else {
-                    intent = new Intent(getActivity(), G0_SettingActivity.class);
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.push_right_in,
-                            R.anim.push_right_out);
-                }**/
-                break;
             case R.id.profile_head_camera:
 
                 if (uid.equals("")) {
@@ -279,20 +230,20 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
             case R.id.profile_credit:
 
                 //我的积分
-                Toast.makeText(getActivity(),"我的积分",Toast.LENGTH_SHORT).show();
-                /**
+                //Toast.makeText(getActivity(),"我的积分",Toast.LENGTH_SHORT).show();
+
                 if (uid.equals("")) {
                     isRefresh = true;
-                    intent = new Intent(getActivity(), A0_SigninActivity.class);
+                    intent = new Intent(getActivity(), SigninActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.push_buttom_in,R.anim.push_buttom_out);
                 } else {
-                    intent = new Intent(getActivity(), E4_HistoryActivity.class);
-                    intent.putExtra("flag", "await_ship");
-                    startActivityForResult(intent, 2);
+                    intent = new Intent(getActivity(), MyCreditActivity.class);
+                    intent.putExtra("credit", userModel.getCurrentUser().getCredit());
+                    startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.push_right_in,
                             R.anim.push_right_out);
-                }**/
+                }
                 break;
             case R.id.profile_download_history:
 
@@ -312,48 +263,58 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
             case R.id.profile_detail:
 
                 //个人信息
-                Toast.makeText(getActivity(),"个人信息",Toast.LENGTH_SHORT).show();
-                /**
+                //Toast.makeText(getActivity(),"个人信息",Toast.LENGTH_SHORT).show();
+
                 if (uid.equals("")) {
                     isRefresh = true;
-                    intent = new Intent(getActivity(), A0_SigninActivity.class);
+                    intent = new Intent(getActivity(), SigninActivity.class);
                     startActivity(intent);
                     getActivity().overridePendingTransition(R.anim.push_buttom_in,R.anim.push_buttom_out);
                 } else {
-                    intent = new Intent(getActivity(), E4_HistoryActivity.class);
-                    intent.putExtra("flag", "finished");
-                    startActivityForResult(intent, 2);
+                    intent = new Intent(getActivity(), MyInfoActivity.class);
+                    startActivityForResult(intent, 0);
                     getActivity().overridePendingTransition(R.anim.push_right_in,
                             R.anim.push_right_out);
-                }**/
+                }
                 break;
-            case R.id.profile_download_manage:
+            case R.id.profile_about:
 
-                //下载管理
-                Toast.makeText(getActivity(),"下载管理",Toast.LENGTH_SHORT).show();
-                /**
-                if (uid.equals("")) {
-                    isRefresh = true;
-                    intent = new Intent(getActivity(), A0_SigninActivity.class);
-                    startActivity(intent);
-                    getActivity().overridePendingTransition(R.anim.push_buttom_in,R.anim.push_buttom_out);
-                } else {
-                    intent = new Intent(getActivity(), E5_CollectionActivity.class);
-                    startActivityForResult(intent, 2);
-                    getActivity().overridePendingTransition(R.anim.push_right_in,
-                            R.anim.push_right_out);
-                }**/
+                //关于
+                //Toast.makeText(getActivity(),"关于",Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(getActivity()).setTitle("关于")       //设置标题
+                        .setMessage("ECBook 1.0版本\nKelvin版权所有")        //设置显示的内容
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        }).show();
                 break;
-            case R.id.profile_help:
+            case R.id.profile_exit:
 
-                //帮助
-                Toast.makeText(getActivity(),"帮助",Toast.LENGTH_SHORT).show();
-                /**
-                 intent = new Intent(getActivity(), G2_InfoActivity.class);
-                 startActivity(intent);
-                 getActivity().overridePendingTransition(R.anim.push_right_in,
-                 R.anim.push_right_out);
-                 **/
+                //退出登录
+                //Toast.makeText(getActivity(),"退出登录",Toast.LENGTH_SHORT).show();
+                new AlertDialog.Builder(getActivity()).setTitle("提示")       //设置标题
+                        .setMessage("您确定要退出登录吗")        //设置显示的内容
+                        .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                shared = mContext.getSharedPreferences("userInfo", 0);
+                                editor = shared.edit();
+                                editor.putString("objectid","");
+                                editor.putString("username","");
+                                editor.putString("email","");
+                                editor.putString("password", "");
+                                editor.putInt("credit", 0);
+                                editor.commit();        //提交更新
+
+                                uid = shared.getString("objectid", "");
+                                camera.setVisibility(View.GONE);
+                                photo.setImageResource(R.drawable.profile_no_avatar_icon);
+                                name.setText("点击此处登录");
+                            }
+                        }).show();
                 break;
             case R.id.profile_head_name:
 
@@ -383,9 +344,7 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
     @Override
     public void onRefresh(int id) {
 
-        if (!uid.equals("")) {
-            getUserInfo();
-        }
+        getUserInfo();
 
     }
 
@@ -432,6 +391,10 @@ public class ProfileFragment extends Fragment implements XListView.IXListViewLis
                     photo.setImageURI(imageUri);
                     userModel.uploadAvatar(imageUri);     //保存头像
                 }
+                break;
+            }
+            case 0: {
+                getUserInfo();
                 break;
             }
             default:

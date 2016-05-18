@@ -30,6 +30,7 @@
             android:textColor="#ffffff"
             android:textSize="18dp" />
 
+        <!--
         <ImageView
             android:id="@+id/profile_setting"
             android:layout_width="65dp"
@@ -38,7 +39,7 @@
             android:layout_marginRight="5dp"
             android:background="@drawable/filter_blue_btn"
             android:padding="5dp"
-            android:src="@drawable/profile_refresh_site_icon" />
+            android:src="@drawable/profile_refresh_site_icon" />-->
     </FrameLayout>
 
     <com.kelvin.ecbook.view.xlistview.XListView

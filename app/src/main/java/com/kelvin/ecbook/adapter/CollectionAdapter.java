@@ -1,8 +1,10 @@
 package com.kelvin.ecbook.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -24,6 +26,7 @@ import com.kelvin.ecbook.config.MyConstant;
 import com.kelvin.ecbook.fragment.CollectionFragment;
 import com.kelvin.ecbook.model.Book;
 import com.kelvin.ecbook.model.Collection;
+import com.kelvin.ecbook.model.EcBookUser;
 import com.kelvin.ecbook.utils.ImageLoadOptions;
 import com.kelvin.ecbook.view.toast.ToastView;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -163,22 +166,51 @@ public class CollectionAdapter extends BaseAdapter {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
 
-                                            Book book = new Book();
-                                            book.delete(mContext, mData.get(position).getBook(), new DeleteListener() {
+                                            /**
+                                             * 判断积分是否足够
+                                             */
+                                            SharedPreferences sh = mContext.getSharedPreferences("userInfo", Activity.MODE_PRIVATE);
+                                            final String userid = sh.getString("objectid", "");
+                                            BmobQuery<EcBookUser> query = new BmobQuery<>();
+                                            query.getObject(mContext, userid, new GetListener<EcBookUser>() {
                                                 @Override
-                                                public void onSuccess() {
-                                                    ToastView toast = new ToastView(mContext, "撤回成功");
-                                                    toast.setGravity(Gravity.CENTER, 0, 0);
-                                                    toast.show();
+                                                public void onSuccess(EcBookUser ecBookUser) {
+
+                                                    if (ecBookUser.getCredit() < 3) {
+                                                        String tip = "您的EC币不够了哦";
+                                                        new AlertDialog.Builder(mContext).setTitle("提示")       //设置标题
+                                                                .setMessage(tip)        //设置显示的内容
+                                                                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                                                                    @Override
+                                                                    public void onClick(DialogInterface dialog, int which) {
+
+                                                                    }
+                                                                }).show();
+                                                    } else {
+                                                        Book book = new Book();
+                                                        book.delete(mContext, mData.get(position).getBook(), new DeleteListener() {
+                                                            @Override
+                                                            public void onSuccess() {
+                                                                ToastView toast = new ToastView(mContext, "撤回成功");
+                                                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                                                toast.show();
+                                                            }
+
+                                                            @Override
+                                                            public void onFailure(int i, String s) {
+                                                                ToastView toast = new ToastView(mContext, "撤回失败：" + s);
+                                                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                                                toast.show();
+                                                            }
+                                                        });
+                                                    }
                                                 }
 
                                                 @Override
                                                 public void onFailure(int i, String s) {
-                                                    ToastView toast = new ToastView(mContext, "撤回失败：" + s);
-                                                    toast.setGravity(Gravity.CENTER, 0, 0);
-                                                    toast.show();
                                                 }
                                             });
+
                                         }
                                     })
                                     .setNegativeButton("取消", new DialogInterface.OnClickListener() {

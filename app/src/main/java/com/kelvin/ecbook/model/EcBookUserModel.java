@@ -3,6 +3,7 @@ package com.kelvin.ecbook.model;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.util.Log;
 import android.view.Gravity;
 
 import com.kelvin.ecbook.config.MyConstant;
@@ -56,6 +57,10 @@ public class EcBookUserModel {
         user.setPassword(password);
     }
 
+    public void setCredit(int credit){
+        user.setCredit(credit);
+    }
+
     public EcBookUser getCurrentUser(){
         return user;
     }
@@ -73,6 +78,8 @@ public class EcBookUserModel {
                     if (list.size() != 0) {
 
                         user = list.get(0);
+
+                        Log.e("credit",user.getCredit()+"");
                     }
                 }
 
@@ -124,6 +131,7 @@ public class EcBookUserModel {
         editor.putString("username",user.getUsername());
         editor.putString("email",user.getEmail());
         editor.putString("password",user.getPassword());
+        editor.putInt("credit",user.getCredit());
         editor.commit();        //提交更新
     }
 

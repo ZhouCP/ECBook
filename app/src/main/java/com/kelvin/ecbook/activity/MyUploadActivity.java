@@ -3,6 +3,7 @@ package com.kelvin.ecbook.activity;
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -13,6 +14,8 @@ import com.kelvin.ecbook.adapter.CollectionAdapter;
 import com.kelvin.ecbook.config.CollectionType;
 import com.kelvin.ecbook.model.Book;
 import com.kelvin.ecbook.model.Collection;
+import com.kelvin.ecbook.view.dialog.MyProgressDialog;
+import com.kelvin.ecbook.view.toast.ToastView;
 import com.kelvin.ecbook.view.xlistview.XListViewCart;
 import com.kelvin.ecbook.view.xlistview.XListViewCart.IXListViewListenerCart;
 
@@ -36,11 +39,15 @@ public class MyUploadActivity extends BaseActivity implements IXListViewListener
 
     private FrameLayout top_view,no_collections;
 
+    private MyProgressDialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_myupload);
+
+        dialog = new MyProgressDialog(this,"拼命加载中...");
 
         back = (ImageView) findViewById(R.id.top_view_back);
         back.setOnClickListener(new View.OnClickListener() {
@@ -69,6 +76,8 @@ public class MyUploadActivity extends BaseActivity implements IXListViewListener
     }
 
     private void getMyUploads(){
+
+        dialog.show();
 
         SharedPreferences sh = getSharedPreferences("userInfo", Activity.MODE_PRIVATE);
         final String userid = sh.getString("objectid", "");
@@ -100,11 +109,18 @@ public class MyUploadActivity extends BaseActivity implements IXListViewListener
                 }
                 adapter = new CollectionAdapter(MyUploadActivity.this,collections, CollectionType.MYUPLOAD);
                 xListView.setAdapter(adapter);
+
+                if (dialog.isShowing()) dialog.dismiss();
             }
 
             @Override
             public void onError(int i, String s) {
 
+                if (dialog.isShowing()) dialog.dismiss();
+
+                ToastView toast = new ToastView(MyUploadActivity.this, "获取信息失败：" + s);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
             }
         });
     }

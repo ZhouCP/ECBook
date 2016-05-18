@@ -268,7 +268,7 @@
 
 
         <LinearLayout
-            android:id="@+id/profile_download_manage"
+            android:id="@+id/profile_about"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:layout_margin="10dp"
@@ -281,7 +281,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_weight="1"
-                android:text="@string/profile_download_manager"
+                android:text="@string/profile_about"
                 android:textColor="#000000"
                 android:textSize="16dp" />
 
@@ -293,7 +293,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/profile_help"
+            android:id="@+id/profile_exit"
             android:layout_width="fill_parent"
             android:layout_height="50dp"
             android:layout_margin="10dp"
@@ -306,7 +306,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:layout_weight="1"
-                android:text="@string/profile_help"
+                android:text="@string/profile_exit"
                 android:textColor="#000000"
                 android:textSize="16dp" />
 
